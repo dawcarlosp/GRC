@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="image/png" sizes="16x16" rel="icon" href="../static/favicon/icons8-paella-48.png">
+    <title>Regístratre</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="../static/js/registro.js" defer></script>
+</head>
+<body class="bg-amber-600 flex flex-col items-center justify-center font-mono">
+    <div action="" class="border flex flex-col items-center justify-center mt-10 p-10 rounded-xl" id="formulario">
+        <h1 class="font-bold text-3xl">Gestión restaurante</h1>
+        <h2>Regístrate y disfruta de las funcionalidades de la app</h2>
+        <label for="email" class="font-bold">Email:</label>
+        <input type="text" id="email" name="email" class="border">
+        <label for="nombreUsuario" class="font-bold">Nombre de usuario:</label>
+        <input type="text" id="nombreUsuario" name="nombreUsuario" class="border">
+        <label for="contrasenia" class="font-bold">Contraseña:</label>
+        <input type="password" id="contrasenia" name="contrasenia" class="border">
+        <button class="border my-5 hover:bg-black hover:text-amber-600 p-2 rounded-xl" id="registrarse">Registrarse</button>
+    </div>
+    <div class="flex items-center justify-center">
+        <a class="border hover:bg-black hover:text-amber-600 p-1 rounded-xl mt-5" id="registrate" href="login.html">Logearse</a>
+    </div>
+</body>
+</html>
