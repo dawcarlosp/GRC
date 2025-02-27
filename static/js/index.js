@@ -1,6 +1,9 @@
 const token = localStorage.getItem("token");
 let cuadro = document.getElementById("cuadro");
+let fechaEscogida;
 let reservas = [];
+let reservasDia = [];
+let fechasReservas = [];
 obtenerReservas();
 async function obtenerReservas() {
     try {
@@ -25,19 +28,26 @@ async function obtenerReservas() {
         console.error("Error:", error);
     }
 }
-function generarHorasDisponibles(inicio, cierre) {
+function generarHorasDisponibles(valor,inicio, cierre) {
     let selectAnterior = document.getElementById("select");
     let labelAnterior = document.getElementById("label");
+    //Cambiar formato de la fecha
+    valor = valor.split("-").reverse().join("-")
     //Si ya tengo un select y un label creado, lo borro para no tener elementos duplicados  
     if(selectAnterior && labelAnterior){
     cuadro.removeChild(labelAnterior);
     cuadro.removeChild(selectAnterior);
     }
+    reservasDia =  reservas.filter(reserva => reserva.fechaReserva == valor);
+    let tiempo = new Date();
+    reservasDia.forEach(rd => {
+        tiempo.setHours(parseInt(rd.horaReserva.split(":")[0]))
+        tiempo.setMinutes(parseInt(rd.horaReserva.split(":")[1]))});
+    alert(tiempo.getHours())
     const select = document.createElement("select");
     select.id="select";
     const label = document.createElement("label");
     label.id = "label";
-    alert(reservas[0].horaReserva);
     label.textContent = "Hora reserva:"
     for (let i = inicio; i <= cierre; i++) {
        let hora = `${i}:00`;
@@ -56,13 +66,15 @@ function generarHorasDisponibles(inicio, cierre) {
     })}
 //Intento de evento cuando se selecciona una fecha
 let fechaInput = document.getElementById("fechaReserva");
-fechaInput.addEventListener("change", () => generarHorasDisponibles(12,20));
+fechaInput.addEventListener("change", () => {
+    fechaEscogida = fechaInput.value;
+    generarHorasDisponibles(fechaEscogida,12,20)});
 //Metodo para pintar las mesas disponibles
 function pintarMesas(){
     let mesas = [1,2,3,4];
     cuadro.innerHTML = "";
     regenerarFecha();
-    generarHorasDisponibles(12,20); 
+    generarHorasDisponibles(fechaEscogida,12,20); 
     mesas.forEach(mesa => {
         let div = document.createElement("div");
         div.textContent = mesa;
@@ -78,6 +90,7 @@ function regenerarFecha(){
     input.type = "date";
     input.className = "border";
     input.id = "fechaReserva";
+    input.value = fechaEscogida;
     cuadro.appendChild(label);
     cuadro.appendChild(input);
 }
