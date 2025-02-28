@@ -3,17 +3,25 @@ let cuadro = document.getElementById("cuadro");
 let fechaEscogida;
 let reservas = [];
 let mesas = [];
-
+let ip = "192.168.21.159";
 // Verificar autenticación
 if (!token) {
     location.href = "html/login.html";
     throw new Error("No hay token, inicia sesión.");
 }
+ // Decodificar el token (en base64)
+ const base64Url = token.split('.')[1];
+ const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+ const decodedToken = JSON.parse(window.atob(base64));
 
+ console.log(decodedToken);  // Aquí puedes ver los datos del usuario (como el ID)
+ const idCliente = decodedToken.sub;  // Si el ID está en el payload del token
+ console.log("idcliente"+idCliente);
 // Obtener reservas
 async function obtenerReservas() {
     try {
-        const response = await fetch("http://localhost:8080/reservas", {
+        //Para probarlo desde el movil
+        const response = await fetch(`http://${ip}:8080/reservas`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -32,7 +40,7 @@ async function obtenerReservas() {
 // Obtener mesas
 async function obtenerMesas() {
     try {
-        const response = await fetch("http://localhost:8080/mesas", {
+        const response = await fetch(`http://${ip}:8080/mesas`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -89,10 +97,9 @@ document.getElementById("fechaReserva").addEventListener("change", (event) => {
 function pintarMesas() {
     let horaSeleccionada = document.getElementById("select").value;
     if (!horaSeleccionada) return;
-    alert(fechaEscogida)
     // Filtrar reservas que coincidan con la fecha y hora seleccionadas
     let reservasDiaHora = reservas.filter(reserva => 
-        reserva.fechaReserva === fechaEscogida && reserva.horaReserva === "17:49"
+        reserva.fechaReserva === fechaEscogida && reserva.horaReserva.startsWith(horaSeleccionada)
     );
     console.log("reservas")
     console.log(reservas)
@@ -102,7 +109,6 @@ function pintarMesas() {
     let mesasOcupadas = reservasDiaHora.map(reserva => reserva.mesa.id);
     // Limpiar solo los elementos de las mesas (sin borrar la UI completa)
     document.querySelectorAll(".mesa").forEach(mesa => mesa.remove());
-    mesasOcupadas.forEach(mesa => alert(mesa.id));
     let mesasDisponibles = mesas.filter(mesa => !mesasOcupadas.includes(mesa.id));
     //mesasDisponibles.forEach(mesa => alert(mesa.id))
     if (mesasDisponibles.length === 0) {
