@@ -210,3 +210,4 @@ async function reservar(){
     console.error(error);
 }
 }
+//Para dejarle lo opción al usuario cerrar sesion
