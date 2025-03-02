@@ -204,10 +204,8 @@ async function reservar(){
         }
         //Capturo la respuesta para coger el id
         const reservaInsertada = await response.json();
-
-        //Imprimimos en la consola para depurar
         console.log(reservaInsertada);
-
+        window.location.href = "success.html";
 }catch (error){
     console.error(error);
 }

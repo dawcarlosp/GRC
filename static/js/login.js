@@ -16,7 +16,6 @@ async function login() {
         }
 
         const data = await response.json();
-        alert(data.token),
         localStorage.setItem("token", data.token); // Guardar token
         location.href = "../index.html";
     } catch (error) {
